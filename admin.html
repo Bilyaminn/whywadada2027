@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>WHY WADADA — Campaign Command Centre</title>
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="loginView" class="login-view">
+    <div class="login-card">
+      <div class="brand"><img src="assets/wadada-icon.png" alt=""><span>WHY WADADA</span></div>
+      <div class="eyebrow">CAMPAIGN COMMAND CENTRE</div>
+      <h1>Lead with<br><span>HEARTS.</span></h1>
+      <p>Secure campaign intelligence for supporter growth across Nasarawa State.</p>
+      <form id="loginForm">
+        <label>Email<input id="email" type="email" required autocomplete="username" placeholder="Admin email"></label>
+        <label>Password<input id="password" type="password" required autocomplete="current-password" placeholder="Password"></label>
+        <button class="primary" type="submit">Enter Command Centre <span>→</span></button>
+        <div id="loginError" class="error"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="appView" class="app hidden">
+    <aside class="sidebar">
+      <div class="brand"><img src="assets/wadada-icon.png" alt=""><span>WHY WADADA</span></div>
+      <div class="profile">
+        <div id="roleBadge">ADMIN</div>
+        <strong id="adminEmail">—</strong>
+        <span id="adminScope">All Nasarawa</span>
+      </div>
+      <div class="side-label">COMMAND CENTRE</div>
+      <button class="nav active" data-section="overview"><b>01</b> Overview</button>
+      <button class="nav" data-section="supporters"><b>02</b> Supporters</button>
+      <button class="nav" data-section="lga"><b>03</b> LGA & Ward</button>
+      <button class="nav" data-section="trends"><b>04</b> Growth Trends</button>
+      <button class="nav super-only" data-section="activity"><b>05</b> Activity Log</button>
+      <button class="nav super-only" data-section="admins"><b>06</b> Admin Management</button>
+      <button class="nav super-only" data-section="media"><b>07</b> Media & Gallery</button>
+      <a class="nav link" href="index.html"><b>↗</b> Public Website</a>
+      <div class="sidebar-bottom">
+        <div class="hearts">H E A R T S <small>HUMAN • ECONOMIC • ACCOUNTABLE • RESPONSIVE • TRANSPARENT • SECURITY</small></div>
+        <button id="logout" class="logout">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div id="dashboardError" class="dashboard-error hidden" role="alert"></div>
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">NASARAWA STATE • 2027</div>
+          <h2 id="sectionTitle">Overview</h2>
+        </div>
+        <div class="top-actions"><span id="lastUpdated">—</span><button id="refresh">↻ Refresh</button></div>
+      </header>
+
+      <section id="overview" class="section">
+        <div class="scope-banner" id="scopeBanner">Live campaign intelligence</div>
+        <div class="metrics">
+          <article class="metric"><span>TOTAL SUPPORTERS</span><strong id="total">—</strong><small>Registered in your scope</small></article>
+          <article class="metric"><span>TODAY</span><strong id="today">—</strong><small>Since midnight</small></article>
+          <article class="metric"><span>LAST 7 DAYS</span><strong id="week">—</strong><small>New registrations</small></article>
+          <article class="metric accent"><span>REACH</span><strong id="lgaCount">—</strong><small>LGAs with registrations</small></article>
+        </div>
+
+        <div class="grid-two">
+          <article class="panel">
+            <div class="panel-head"><div><span class="eyebrow">GEOGRAPHY</span><h3>LGA leaderboard</h3></div><button class="ghost" data-go="lga">View all</button></div>
+            <div id="lgaBars" class="bars"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><span class="eyebrow">LATEST</span><h3>Recent supporters</h3></div><button class="ghost" data-go="supporters">View all</button></div>
+            <div id="recent" class="recent"></div>
+          </article>
+        </div>
+
+        <div class="panel trend-panel">
+          <div class="panel-head"><div><span class="eyebrow">MOMENTUM</span><h3>30-day registration trend</h3></div><span class="trend-total" id="trendTotal">—</span></div>
+          <div id="trendChart" class="trend-chart"></div>
+        </div>
+      </section>
+
+      <section id="supporters" class="section hidden">
+        <div class="section-intro"><div><span class="eyebrow">SUPPORTER REGISTER</span><h3>People behind the movement</h3></div><p>Search and review registrations available within your role's permitted scope.</p></div>
+        <div id="supportersRoot"></div>
+      </section>
+
+      <section id="lga" class="section hidden">
+        <div class="section-intro"><div><span class="eyebrow">FIELD INTELLIGENCE</span><h3>LGA & Ward leaderboard</h3></div><p>See where supporter registrations are concentrating and identify strong local structures.</p></div>
+        <div id="lgaWardRoot"></div>
+      </section>
+
+      <section id="trends" class="section hidden">
+        <div class="section-intro"><div><span class="eyebrow">GROWTH INTELLIGENCE</span><h3>Registration momentum</h3></div><p>Track daily supporter growth and compare the movement's current pace.</p></div>
+        <div class="range-tabs"><button class="range active" data-days="30">30 days</button><button class="range" data-days="60">60 days</button><button class="range" data-days="90">90 days</button></div>
+        <article class="panel trend-panel big"><div class="panel-head"><div><span class="eyebrow">DAILY REGISTRATIONS</span><h3 id="trendTitle">Last 30 days</h3></div><strong id="trendSum">—</strong></div><div id="trendChartBig" class="trend-chart big-chart"></div></article>
+      </section>
+
+      <section id="admins" class="section hidden super-only-section">
+  <div class="admin-command-head">
+    <div>
+      <span class="eyebrow">ADMINISTRATION</span>
+      <h3>Access & administrators</h3>
+      <p>Control who can operate the campaign dashboard and exactly which geography each coordinator can access.</p>
+    </div>
+    <div class="admin-security-state"><span class="security-dot"></span><div><strong>Super Admin controls</strong><small>Restricted access • audit logged</small></div></div>
+  </div>
+
+  <div class="admin-summary-grid">
+    <article class="admin-summary-card admin-summary-total"><span class="summary-icon">◎</span><div><small>TOTAL ADMINS</small><strong id="adminTotal">—</strong></div><em>Access accounts</em></article>
+    <article class="admin-summary-card"><span class="summary-icon">L</span><div><small>LGA COORDINATORS</small><strong id="adminLgaCount">—</strong></div><em>Area coverage</em></article>
+    <article class="admin-summary-card"><span class="summary-icon">W</span><div><small>WARD COORDINATORS</small><strong id="adminWardCount">—</strong></div><em>Grassroots coverage</em></article>
+  </div>
+
+  <article class="panel admin-directory-card">
+    <div class="admin-directory-head">
+      <div><span class="eyebrow">ACCESS DIRECTORY</span><h3>Administrators</h3><p>Review every coordinator account, its role and geographic scope.</p></div>
+      <button id="openCreateAdmin" class="admin-add-button" type="button"><span>＋</span> Add administrator</button>
+    </div>
+    <div class="admin-directory-tools">
+      <div class="admin-search"><span>⌕</span><input id="adminSearch" type="search" placeholder="Search administrators…" autocomplete="off"></div>
+      <select id="adminRoleFilter"><option value="">All roles</option><option value="lga_coordinator">LGA Coordinators</option><option value="ward_coordinator">Ward Coordinators</option><option value="super_admin">Super Admins</option></select>
+    </div>
+    <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Administrator</th><th>Role</th><th>Coverage</th><th>Created</th><th>Status</th><th>Actions</th></tr></thead><tbody id="adminRows"></tbody></table></div>
+  </article>
+
+  <article class="panel permission-matrix-card">
+    <div class="permission-head"><div><span class="eyebrow">ACCESS POLICY</span><h3>Role & permission matrix</h3><p>Permissions are enforced by the API, not just hidden in the interface.</p></div><span class="policy-lock">✓ Server enforced</span></div>
+    <div class="permission-table-wrap"><table class="permission-table"><thead><tr><th>Capability</th><th>Super Admin</th><th>LGA Coordinator</th><th>Ward Coordinator</th></tr></thead><tbody id="permissionRows"></tbody></table></div>
+  </article>
+</section>
+
+  <div id="createAdminModal" class="admin-modal hidden" aria-hidden="true">
+    <div class="admin-modal-backdrop" data-close-admin-modal></div>
+    <div class="admin-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="createAdminTitle">
+      <button class="admin-modal-close" type="button" data-close-admin-modal aria-label="Close">×</button>
+      <div class="modal-kicker"><span class="modal-shield">✓</span><span>SECURE ACCESS</span></div>
+      <h3 id="createAdminTitle">Create administrator</h3>
+      <p class="modal-copy">Create a scoped account. Coordinators will only see supporter data within the LGA or Ward you assign.</p>
+      <form id="createAdminForm" class="admin-form">
+        <div class="admin-field full"><label for="newAdminEmail">Email address</label><input id="newAdminEmail" type="email" required autocomplete="off" placeholder="coordinator@example.com"></div>
+        <div class="admin-field"><label for="newAdminPassword">Temporary password</label><input id="newAdminPassword" type="password" required minlength="8" autocomplete="new-password" placeholder="Minimum 8 characters"><small>They can change this after signing in.</small></div>
+        <div class="admin-field"><label for="newAdminRole">Role</label><select id="newAdminRole" required><option value="lga_coordinator">LGA Coordinator</option><option value="ward_coordinator">Ward Coordinator</option></select><small>Choose the coordinator's access level.</small></div>
+        <div class="admin-field"><label for="newAdminLga">LGA</label><select id="newAdminLga" required><option value="">Select an LGA</option></select></div>
+        <div id="newAdminWardWrap" class="admin-field hidden"><label for="newAdminWard">Ward</label><select id="newAdminWard" required><option value="">Select a Ward</option></select></div>
+        <div id="createAdminMessage" class="form-message full" role="status"></div>
+        <div class="admin-form-actions full"><button type="button" class="admin-cancel" data-close-admin-modal>Cancel</button><button class="admin-submit" type="submit"><span>Create administrator</span><b>→</b></button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="editAdminModal" class="admin-modal hidden" aria-hidden="true">
+    <div class="admin-modal-backdrop" data-close-edit-modal></div>
+    <div class="admin-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="editAdminTitle">
+      <button class="admin-modal-close" type="button" data-close-edit-modal aria-label="Close">×</button>
+      <div class="modal-kicker"><span class="modal-shield">✎</span><span>ACCESS SETTINGS</span></div>
+      <h3 id="editAdminTitle">Edit administrator</h3><p class="modal-copy">Update the account identity, role or geographic scope. Changes are recorded in the audit trail.</p>
+      <form id="editAdminForm" class="admin-form"><input id="editAdminId" type="hidden">
+        <div class="admin-field full"><label for="editAdminEmail">Email address</label><input id="editAdminEmail" type="email" required></div>
+        <div class="admin-field"><label for="editAdminRole">Role</label><select id="editAdminRole"><option value="lga_coordinator">LGA Coordinator</option><option value="ward_coordinator">Ward Coordinator</option></select></div>
+        <div class="admin-field"><label for="editAdminLga">LGA</label><select id="editAdminLga"><option value="">Select an LGA</option></select></div>
+        <div id="editAdminWardWrap" class="admin-field hidden"><label for="editAdminWard">Ward</label><select id="editAdminWard"><option value="">Select a Ward</option></select></div>
+        <div id="editAdminMessage" class="form-message full"></div>
+        <div class="admin-form-actions full"><button type="button" class="admin-cancel" data-close-edit-modal>Cancel</button><button class="admin-submit" type="submit">Save changes <b>→</b></button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="resetAdminModal" class="admin-modal hidden" aria-hidden="true">
+    <div class="admin-modal-backdrop" data-close-reset-modal></div>
+    <div class="admin-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="resetAdminTitle">
+      <button class="admin-modal-close" type="button" data-close-reset-modal aria-label="Close">×</button>
+      <div class="modal-kicker"><span class="modal-shield">↻</span><span>CREDENTIAL CONTROL</span></div>
+      <h3 id="resetAdminTitle">Reset password</h3><p class="modal-copy">Set a new temporary password for this administrator. Never share passwords through the activity log.</p>
+      <form id="resetAdminForm" class="admin-form"><input id="resetAdminId" type="hidden">
+        <div class="admin-field full"><label for="resetAdminPassword">New temporary password</label><input id="resetAdminPassword" type="password" minlength="8" required autocomplete="new-password" placeholder="Minimum 8 characters"></div>
+        <div id="resetAdminMessage" class="form-message full"></div>
+        <div class="admin-form-actions full"><button type="button" class="admin-cancel" data-close-reset-modal>Cancel</button><button class="admin-submit" type="submit">Reset password <b>→</b></button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="adminActivityModal" class="admin-modal hidden" aria-hidden="true">
+    <div class="admin-modal-backdrop" data-close-activity-modal></div>
+    <div class="admin-modal-dialog admin-activity-dialog" role="dialog" aria-modal="true" aria-labelledby="accountActivityTitle">
+      <button class="admin-modal-close" type="button" data-close-activity-modal aria-label="Close">×</button>
+      <div class="modal-kicker"><span class="modal-shield">◷</span><span>ACCOUNT AUDIT</span></div>
+      <h3 id="accountActivityTitle">Administrator activity</h3><p id="accountActivitySubtitle" class="modal-copy"></p>
+      <div id="accountActivityList" class="account-activity-list"></div>
+    </div>
+  </div>
+
+      <section id="media" class="section hidden super-only-section">
+        <div class="media-command-head">
+          <div><span class="eyebrow">MOVEMENT MEDIA</span><h3>Gallery & media</h3><p>Upload campaign photos and videos from the field. Published items appear automatically on the public website.</p></div>
+          <div class="media-upload-note"><strong>SUPER ADMIN</strong><span>Max 12MB • JPG, PNG, WEBP, GIF, MP4, WEBM</span></div>
+        </div>
+        <div class="media-manager-grid">
+          <article class="panel media-upload-card">
+            <div class="media-upload-icon">↑</div><span class="eyebrow">ADD TO GALLERY</span><h3>Upload campaign media</h3><p>Select an image or video, add a title and optional description, then publish it to the movement website.</p>
+            <form id="mediaUploadForm" class="media-upload-form">
+              <label class="media-dropzone" id="mediaDropzone"><input id="mediaFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm" required><span class="media-file-icon">＋</span><strong id="mediaFileName">Choose a photo or video</strong><small>or drag and drop it here</small></label>
+              <label>Title<input id="mediaTitle" type="text" maxlength="160" required placeholder="e.g. Akwanga Ward Meeting"></label>
+              <label>Description <span>optional</span><textarea id="mediaDescription" maxlength="500" rows="3" placeholder="Tell supporters what is happening in this moment…"></textarea></label>
+              <label class="media-publish-toggle"><input id="mediaPublished" type="checkbox" checked><span><strong>Publish immediately</strong><small>Visible on the public Movement Media section.</small></span></label>
+              <button class="admin-submit media-upload-button" type="submit"><span>Upload to gallery</span><b>↑</b></button>
+              <div id="mediaUploadMessage" class="form-message" role="status"></div>
+            </form>
+          </article>
+          <article class="panel media-library-card">
+            <div class="media-library-head"><div><span class="eyebrow">MEDIA LIBRARY</span><h3>Published & uploaded</h3></div><button id="refreshMedia" class="ghost" type="button">↻ Refresh</button></div>
+            <div id="mediaLibrary" class="media-library"><div class="media-library-empty">Loading media library…</div></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="activity" class="section hidden super-only-section">
+        <div class="section-intro"><div><span class="eyebrow">AUDIT TRAIL</span><h3>Admin activity</h3></div><p>Super Admin only. Review administrative access and data exports.</p></div>
+        <article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Action</th><th>Admin</th><th>Role</th><th>Scope</th></tr></thead><tbody id="activityRows"></tbody></table></div></article>
+      </section>
+    <section class="section" id="intelligencePanel"><div class="section-intro"><div><span class="eyebrow">CAMPAIGN INTELLIGENCE</span><h3>What needs attention</h3></div><p>Recent growth, strongest LGAs and fastest-moving wards.</p></div><div class="intelligence-grid"><div class="intel-card"><span>30-DAY GROWTH</span><strong id="growthPercent">—</strong><small>vs previous 30 days</small></div><div class="intel-card"><span>LAST 30 DAYS</span><strong id="last30Days">—</strong><small>new registrations</small></div><div class="intel-card"><span>TOP LGA</span><strong id="topLgaName">—</strong><small id="topLgaCount">— supporters</small></div><div class="intel-card"><span>TOP WARD</span><strong id="topWardName">—</strong><small id="topWardCount">— supporters</small></div></div><div class="notification-strip" id="adminNotifications">Loading campaign alerts…</div></section>
+</main>
+  </div>
+  <script type="module" src="admin.js"></script>
+  <script type="module" src="/src/supporters/main.jsx"></script>
+  <script type="module" src="/src/lga-ward/main.jsx"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Login | WHY WADADA</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    body { min-height:100vh; display:grid; place-items:center; margin:0; background:#f5f7f5; }
+    .login-shell { width:min(430px,92vw); }
+    .login-card { background:#fff; border-radius:22px; padding:32px; box-shadow:0 20px 60px rgba(0,0,0,.10); border:1px solid #e5e7eb; }
+    .brand { text-align:center; margin-bottom:26px; }
+    .brand-mark { width:min(240px,64vw); height:auto; margin:0 auto 10px; object-fit:contain; display:block; }
+    .brand p { color:#6b7280; margin:0; font-size:14px; }
+    label { display:block; font-weight:600; margin:16px 0 7px; }
+    input { width:100%; box-sizing:border-box; padding:13px 14px; border:1px solid #d1d5db; border-radius:11px; font-size:15px; }
+    button { width:100%; margin-top:22px; padding:13px 16px; border:0; border-radius:11px; background:#16803c; color:#fff; font-weight:700; cursor:pointer; }
+    button:disabled { opacity:.65; cursor:not-allowed; }
+    .error { display:none; margin-top:14px; padding:11px 13px; border-radius:10px; background:#fef2f2; color:#b91c1c; font-size:14px; }
+    .back { display:block; text-align:center; margin-top:18px; color:#166534; text-decoration:none; font-size:14px; }
+    .hint { margin-top:18px; padding:12px; border-radius:10px; background:#f0fdf4; color:#166534; font-size:13px; line-height:1.5; }
+  </style>
+</head>
+<body>
+  <main class="login-shell">
+    <section class="login-card">
+      <div class="brand">
+        <img class="brand-mark" src="assets/why-wadada-logo.jpg" alt="WHY WADADA">
+        <p>Campaign Command Centre</p>
+      </div>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="username" required placeholder="admin@example.com">
+
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Enter your password">
+
+        <button id="loginBtn" type="submit">Sign in to Dashboard</button>
+        <div id="error" class="error"></div>
+      </form>
+
+      <div class="hint">
+        Authorized campaign administrators only. Access to LGA and ward data is controlled by your assigned role.
+      </div>
+
+      <a class="back" href="index.html">← Back to WHY WADADA</a>
+    </section>
+  </main>
+
+  <script type="module" src="admin-login.js"></script>
+</body>
+</html>

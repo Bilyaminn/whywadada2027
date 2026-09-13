@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#075b2d"><title>WHY WADADA | Poster Generator</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="generator.css">
+</head>
+<body>
+<header class="generator-header">
+<a href="index.html" class="back">← Home Page</a><div class="generator-brand"><img src="assets/wadada-icon.png" alt="WHY WADADA logo"><div class="header-title">CAMPAIGN POSTER STUDIO</div></div><span class="apc">APC • 2027</span>
+</header>
+<main class="studio">
+<aside class="controls">
+<div class="controls-card">
+  <h1 class="card-title">GENERATE YOUR CAMPAIGN POSTER</h1>
+  <p class="card-sub">Create and download your personalized poster to show your support for <strong>Sen. Ahmed Aliyu Wadada.</strong></p>
+  <hr class="divider">
+
+  <label class="section-label" for="photoInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 15l-5-5L5 19"/></svg>YOUR PHOTO</label>
+  <label class="upload-zone" id="uploadZone" for="photoInput">
+    <input id="photoInput" type="file" accept="image/*">
+    <span class="upload-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>
+    <strong>Click to upload your photo</strong>
+    <small>JPG, PNG or WEBP · Max 5MB</small>
+  </label>
+  <p class="upload-error" id="uploadError" hidden></p>
+  <div class="position-hint">Drag your photo in the live preview to reposition it · scroll to zoom</div>
+  <div class="zoom-row"><span>−</span><input id="zoomInput" type="range" min="1" max="2.8" step=".01" value="1.15"><span>+</span></div>
+  <button class="reset" id="resetPhoto">Reset photo position</button>
+
+  <label class="section-label" for="nameInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 1 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>YOUR NAME <span class="optional">(Optional)</span></label>
+  <input id="nameInput" class="text-input" type="text" placeholder="Enter your full name">
+
+  <label class="section-label">TEMPLATE</label>
+  <div class="template-row template-row-2">
+    <button class="template active" data-template="flyer"><canvas class="template-thumb" width="224" height="280"></canvas><span>Flyer</span></button>
+    <button class="template" data-template="classic"><canvas class="template-thumb" width="224" height="280"></canvas><span>Cover</span></button>
+  </div>
+
+  <div class="info-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.8 8.7 9 10 5.2-1.3 9-5 9-10V6l-9-4Z"/><path d="m9 12 2 2 4-4"/></svg><span>Your photo and name will appear on the poster as a proud supporter of Sen. Ahmed Aliyu Wadada.</span></div>
+
+  <button id="downloadBtn" class="download"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M12 16l-4-4M12 16l4-4"/><path d="M4 18v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> DOWNLOAD POSTER</button>
+  <a href="index.html" class="home-link">Back to Home Page</a>
+</div>
+<div class="tip-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .8 1.7v.5h5.6v-.5c0-.7.3-1.3.8-1.7A6 6 0 0 0 12 3Z"/></svg><span><strong>Tip:</strong> Use a clear, well-lit photo for the best results.</span></div>
+</aside>
+
+<section class="preview-area">
+<div class="preview-toolbar"><span>LIVE PREVIEW</span><div><button id="fitBtn">FIT</button><button id="fullscreenBtn">FULLSCREEN</button></div></div>
+<div class="canvas-wrap" id="canvasWrap">
+<canvas id="posterCanvas" width="1200" height="1500"></canvas>
+<div class="face-guide" id="faceGuide" aria-hidden="true"></div>
+<div class="drag-layer" id="dragLayer" aria-label="Drag supporter photo"></div>
+</div>
+<div class="preview-help">Tip: drag the photo • pinch/scroll to zoom • use FIT to reset</div>
+</section>
+</main>
+<script type="module" src="generator.js"></script>
+</body>
+</html>
