@@ -169,7 +169,7 @@ nav a:hover {
 .hero-image {
   position: absolute;
   inset: 0;
-  background: url("assets/wadada-hero.jpg") center 27% / cover no-repeat;
+  background: url("assets/wadada-hero-bg.png") center 2% / cover no-repeat;
   filter: saturate(0.8);
 }
 .hero-overlay {
@@ -280,6 +280,35 @@ nav a:hover {
   font-weight: 800;
   color: #a8bdb0;
 }
+.hero-stats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 30px;
+}
+.hero-stats strong {
+  font-family: var(--display);
+  font-size: clamp(32px, 4vw, 44px);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--gold);
+}
+.hero-stats-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #b8cdbf;
+}
+.hero-stats .counter-status {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  font-size: 9px;
+}
 .hero-note span {
   width: 42px;
   height: 1px;
@@ -335,8 +364,7 @@ nav a:hover {
 .intro h2,
 .section-head h2,
 .about h2,
-.poster h2,
-.counter-intro h2 {
+.poster h2 {
   font-family: var(--display);
   font-size: clamp(38px, 5vw, 72px);
   line-height: 1.03;
@@ -345,8 +373,7 @@ nav a:hover {
 .intro h2 span,
 .section-head h2 span,
 .about h2 span,
-.poster h2 span,
-.counter-intro h2 span {
+.poster h2 span {
   color: var(--green2);
 }
 .intro-copy p {
@@ -354,53 +381,6 @@ nav a:hover {
   line-height: 1.8;
   max-width: 650px;
   color: #4e5a52;
-}
-.counter-section {
-  background: var(--green);
-  color: #fff;
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 8vw;
-  align-items: center;
-  padding: 90px clamp(22px, 8vw, 130px);
-  position: relative;
-  overflow: hidden;
-}
-.counter-section:after {
-  content: "";
-  position: absolute;
-  width: 430px;
-  height: 430px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 50%;
-  right: -140px;
-  top: -180px;
-}
-.counter-intro p {
-  max-width: 620px;
-  color: #c3d7c9;
-  line-height: 1.75;
-  font-size: 13px;
-  margin-top: 22px;
-}
-.counter-number-wrap {
-  border-left: 1px solid rgba(255, 255, 255, 0.2);
-  padding-left: 5vw;
-}
-.counter-label {
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  color: #b8cdbf;
-  font-weight: 900;
-}
-.counter-number-wrap strong {
-  display: block;
-  font-family: var(--display);
-  font-size: clamp(60px, 8vw, 112px);
-  letter-spacing: -0.08em;
-  line-height: 1;
-  color: var(--gold);
-  margin: 8px 0 16px;
 }
 .counter-status {
   display: flex;
@@ -714,21 +694,20 @@ blockquote span {
   .menu-toggle {
     display: block;
   }
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
   .hero-content {
     padding-top: 190px;
+    padding-bottom: 60px;
   }
   .intro,
   .section-head,
   .about,
-  .poster-shell,
-  .counter-section {
+  .poster-shell {
     grid-template-columns: 1fr;
-  }
-  .counter-number-wrap {
-    border-left: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 30px 0 0;
-    margin-top: 25px;
   }
   .heart-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -925,16 +904,6 @@ blockquote span {
   font-weight: 900;
   letter-spacing: 0.05em;
   border-bottom: 1px solid rgba(7, 91, 45, 0.25);
-  padding-bottom: 5px;
-}
-.counter-link {
-  display: inline-block;
-  margin-top: 24px;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   padding-bottom: 5px;
 }
 .why-short {
@@ -2704,7 +2673,6 @@ a {
 
 /* 2026 campaign page flow: sections are intentionally sequenced as a story. */
 main#top > section { scroll-margin-top: 96px; }
-main#top > .counter-section { position: relative; z-index: 1; }
 main#top > .about { position: relative; z-index: 2; }
 main#top > .agenda { position: relative; z-index: 2; }
 main#top > .lga-network-section { position: relative; z-index: 2; }

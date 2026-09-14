@@ -3,7 +3,12 @@
 <html lang="en">
 <head>
 <script>
-    
+    // Turn off the browser's default scroll-position restoration on
+    // refresh/back-forward navigation, and land at the top instead
+    // (unless the URL has a #section link, which we respect). This has
+    // to run as the very first thing in <head>, before layout happens,
+    // or there's a visible jump-then-correct flash instead of a clean
+    // load at the top.
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     if (!location.hash) window.scrollTo(0, 0);
   </script>
@@ -28,6 +33,12 @@
 <main data-page-flow="hero supporters about agenda lgas register poster convener gallery" id="top">
 
 
+
+
+
+
+
+
 <section class="hero" reveal="" reveal-up="">
 <div class="hero-image"></div><div class="hero-overlay"></div><div class="hero-grid"></div>
 <div class="hero-content">
@@ -35,13 +46,10 @@
 <h1>WHY<br/><em>WADADA</em><b>.</b></h1>
 <p class="hero-lead">A people-centred vision for human development, economic opportunity, infrastructure, responsible resource development and lasting security across Nasarawa State.</p>
 <div class="hero-actions"><a class="btn btn-primary" href="#agenda">Explore HEARTS <span>↓</span></a><a class="btn btn-glass" href="#register">Join the Movement <span>↗</span></a></div>
+<div class="hero-stats" id="supporters"><strong id="supporterCount">—</strong><span class="hero-stats-label">Registered supporters<span class="counter-status"><span class="status-dot"></span><span id="counterStatus">Awaiting live data</span></span></span></div>
 <div class="hero-note"><span></span> IN GOD WE TRUST</div>
 </div>
 <div class="hero-side-label">AHMED ALIYU WADADA / GOVERNOR / 2027</div><div class="scroll-cue"><span></span> SCROLL</div>
-</section>
-<section class="counter-section" id="supporters">
-<div class="counter-intro"><div class="section-kicker light">01 / THE MOVEMENT</div><h2>Support is growing<br/><span>across Nasarawa.</span></h2><p>Join the movement and help us understand support across every LGA and ward.</p></div>
-<div class="counter-number-wrap"><span class="counter-label">REGISTERED SUPPORTERS</span><strong id="supporterCount">—</strong><div class="counter-status"><span class="status-dot"></span><span id="counterStatus">Awaiting live data</span></div><a class="counter-link" href="#register">Join the movement →</a></div>
 </section>
 <section class="section about about-v2" id="about">
 <div class="about-v2-media">
@@ -50,7 +58,7 @@
   <div class="about-v2-caption"><span>AHMED ALIYU WADADA</span><span>PUBLIC SERVICE • LEADERSHIP</span></div>
 </div>
 <div class="about-v2-content">
-  <div class="section-kicker">02 / ABOUT WADADA</div>
+  <div class="section-kicker">01 / ABOUT WADADA</div>
   <h2>Experience that<br/><span>shapes the work.</span></h2>
   <p class="about-v2-lead">Sen. Ahmed Aliyu Wadada is a business administrator, bridge builder and legislator whose career spans private enterprise, the House of Representatives and the Senate.</p>
   <div class="about-v2-timeline">
@@ -66,7 +74,7 @@
 </section>
 <section class="section agenda agenda-v2" id="agenda">
   <div class="agenda-v2-top">
-    <div><div class="section-kicker">03 / HEARTS AGENDA • 2027–2031</div><h2><span>HEARTS</span><br/>six priorities, clearly defined.</h2></div>
+    <div><div class="section-kicker">02 / HEARTS AGENDA • 2027–2031</div><h2><span>HEARTS</span><br/>six priorities, clearly defined.</h2></div>
     <div class="agenda-v2-intro"><p>Each letter of HEARTS represents a priority area in the framework.</p><a class="agenda-download" href="assets/THE-WADADA-HEARTS-AGENDA.pdf" rel="noopener" target="_blank">Open full agenda ↗</a></div>
   </div>
   <div class="heart-grid heart-grid-v2" id="heartGrid"><article class="heart-card"><div class="heart-card-top"><span class="heart-letter">H</span><span class="card-index">01/06</span></div><div class="heart-card-copy"><span class="heart-card-label">PRIORITY 1</span><h3>Human Development</h3><p class="card-text">Education, healthcare, youth, women and child development.</p></div></article><article class="heart-card"><div class="heart-card-top"><span class="heart-letter">E</span><span class="card-index">02/06</span></div><div class="heart-card-copy"><span class="heart-card-label">PRIORITY 2</span><h3>Energy & Mineral Resources</h3><p class="card-text">Clean energy, responsible mining and fairer resource opportunities.</p></div></article><article class="heart-card"><div class="heart-card-top"><span class="heart-letter">A</span><span class="card-index">03/06</span></div><div class="heart-card-copy"><span class="heart-card-label">PRIORITY 3</span><h3>Agriculture & Green Economy</h3><p class="card-text">Modern agriculture, irrigation, agribusiness and climate-resilient growth.</p></div></article><article class="heart-card"><div class="heart-card-top"><span class="heart-letter">R</span><span class="card-index">04/06</span></div><div class="heart-card-copy"><span class="heart-card-label">PRIORITY 4</span><h3>Rural & Urban Development</h3><p class="card-text">Better roads, water, sanitation, housing and resilient communities.</p></div></article><article class="heart-card"><div class="heart-card-top"><span class="heart-letter">T</span><span class="card-index">05/06</span></div><div class="heart-card-copy"><span class="heart-card-label">PRIORITY 5</span><h3>Trade, Investment & Industry</h3><p class="card-text">SMEs, investment, industrialisation, entrepreneurship and jobs.</p></div></article><article class="heart-card"><div class="heart-card-top"><span class="heart-letter">S</span><span class="card-index">06/06</span></div><div class="heart-card-copy"><span class="heart-card-label">PRIORITY 6</span><h3>Security</h3><p class="card-text">Community safety, early warning, peacebuilding and stronger response systems.</p></div></article></div>
@@ -74,7 +82,7 @@
 </section>
 <section class="section lga-network-section lga-v2" id="lgas">
   <div class="lga-v2-header">
-    <div><div class="section-kicker">04 / ACROSS NASARAWA</div><h2>Explore the<br/><span>statewide network.</span></h2></div>
+    <div><div class="section-kicker">03 / ACROSS NASARAWA</div><h2>Explore the<br/><span>statewide network.</span></h2></div>
     <p>See which LGAs are leading in registrations, or search for your LGA directly.</p>
   </div>
   <div class="lga-v2-bar">
@@ -85,8 +93,8 @@
   <div class="lga-show-toggle" id="lgaShowToggle" hidden><button type="button" id="lgaShowToggleBtn">Show all 13 LGAs ↓</button></div>
   <div class="lga-v2-footer"><span>13 LGAs</span><strong>One state. Thirteen local networks.</strong><span>Search • Browse • Explore</span></div>
 </section>
-<section class="section registration reveal reveal-up" id="register"><div class="section-kicker">05 / JOIN THE MOVEMENT</div><div class="registration-shell"><div><h2>Stand with<br/><span>WHY WADADA.</span></h2><p>Five quick steps. Register your support and become part of the movement across Nasarawa State.</p><div class="registration-steps"><span class="active">01</span><span>02</span><span>03</span><span>04</span><span>05</span></div></div><form class="quick-register-form" id="supporterForm"><div class="quick-step active" data-step="1"><span class="step-number">STEP 01</span><h3>What's your name?</h3><input aria-label="Your full name" autocomplete="name" minlength="2" name="name" placeholder="Your full name" required=""/><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div><div class="quick-step" data-step="2"><span class="step-number">STEP 02</span><h3>What's your phone number?</h3><input aria-label="Phone number" autocomplete="tel" inputmode="tel" name="phone" placeholder="0803 123 4567" required=""/><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div></div><div class="quick-step" data-step="3"><span class="step-number">STEP 03</span><h3>Select your LGA</h3><select aria-label="Select LGA" name="lga" required=""><option value="">Select your LGA</option></select><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div></div><div class="quick-step" data-step="4"><span class="step-number">STEP 04</span><h3>Select your Ward</h3><select aria-label="Select Ward" disabled="" name="ward" required=""><option value="">Select your LGA first</option></select><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div></div><div class="quick-step" data-step="5"><span class="step-number">STEP 05</span><h3>You're almost there.</h3><p class="register-summary" id="registerSummary"></p><label class="consent"><input name="consent" required="" type="checkbox"/><span>I agree to register as a supporter and allow this information to be used for campaign supporter coordination.</span></label><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary" type="submit">Register My Support <span>→</span></button></div></div><div class="registration-success hidden" id="registrationSuccess"><div class="success-mark">✓</div><span class="step-number">SUPPORT REGISTERED</span><h3>You're now part of WHY WADADA.</h3><p id="successCopy"></p><div class="success-actions"><a class="btn btn-primary" href="generate.html">Create My Poster <span>↗</span></a><button class="btn btn-ghost" id="shareSupport" type="button">Share WHY WADADA <span>↗</span></button></div></div><p class="form-message" id="formMessage"></p></form></div></section>
-<section class="section poster reveal reveal-up" id="poster"><div class="poster-shell"><div class="poster-copy"><div class="section-kicker light">06 / YOUR VOICE</div><h2>Put your<br/><span>WHY WADADA</span><br/>on display.</h2><p>Create a personalized supporter poster, add your photo and share the movement with your friends, family and community.</p><a class="btn btn-primary" href="generate.html">Open Poster Generator <span>↗</span></a></div><div class="poster-preview"><div class="mini-poster"><img alt="Ahmed Aliyu Wadada" src="assets/wadada-hero.jpg" onerror="this.style.display='none'"/><div class="mini-overlay"></div><div class="mini-content"><span>WHY</span><strong>WADADA</strong><small>HEARTS AGENDA • APC • 2027</small></div></div></div></div></section>
+<section class="section registration reveal reveal-up" id="register"><div class="section-kicker">04 / JOIN THE MOVEMENT</div><div class="registration-shell"><div><h2>Stand with<br/><span>WHY WADADA.</span></h2><p>Five quick steps. Register your support and become part of the movement across Nasarawa State.</p><div class="registration-steps"><span class="active">01</span><span>02</span><span>03</span><span>04</span><span>05</span></div></div><form class="quick-register-form" id="supporterForm"><div class="quick-step active" data-step="1"><span class="step-number">STEP 01</span><h3>What's your name?</h3><input aria-label="Your full name" autocomplete="name" minlength="2" name="name" placeholder="Your full name" required=""/><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div><div class="quick-step" data-step="2"><span class="step-number">STEP 02</span><h3>What's your phone number?</h3><input aria-label="Phone number" autocomplete="tel" inputmode="tel" name="phone" placeholder="0803 123 4567" required=""/><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div></div><div class="quick-step" data-step="3"><span class="step-number">STEP 03</span><h3>Select your LGA</h3><select aria-label="Select LGA" name="lga" required=""><option value="">Select your LGA</option></select><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div></div><div class="quick-step" data-step="4"><span class="step-number">STEP 04</span><h3>Select your Ward</h3><select aria-label="Select Ward" disabled="" name="ward" required=""><option value="">Select your LGA first</option></select><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary next-step" type="button">Continue <span>→</span></button></div></div><div class="quick-step" data-step="5"><span class="step-number">STEP 05</span><h3>You're almost there.</h3><p class="register-summary" id="registerSummary"></p><label class="consent"><input name="consent" required="" type="checkbox"/><span>I agree to register as a supporter and allow this information to be used for campaign supporter coordination.</span></label><div class="step-actions"><button class="btn btn-ghost prev-step" type="button">← Back</button><button class="btn btn-primary" type="submit">Register My Support <span>→</span></button></div></div><div class="registration-success hidden" id="registrationSuccess"><div class="success-mark">✓</div><span class="step-number">SUPPORT REGISTERED</span><h3>You're now part of WHY WADADA.</h3><p id="successCopy"></p><div class="success-actions"><a class="btn btn-primary" href="generate.html">Create My Poster <span>↗</span></a><button class="btn btn-ghost" id="shareSupport" type="button">Share WHY WADADA <span>↗</span></button></div></div><p class="form-message" id="formMessage"></p></form></div></section>
+<section class="section poster reveal reveal-up" id="poster"><div class="poster-shell"><div class="poster-copy"><div class="section-kicker light">05 / YOUR VOICE</div><h2>Put your<br/><span>WHY WADADA</span><br/>on display.</h2><p>Create a personalized supporter poster, add your photo and share the movement with your friends, family and community.</p><a class="btn btn-primary" href="generate.html">Open Poster Generator <span>↗</span></a></div><div class="poster-preview"><div class="mini-poster"><img alt="Ahmed Aliyu Wadada" src="assets/wadada-hero.jpg" onerror="this.style.display='none'"/><div class="mini-overlay"></div><div class="mini-content"><span>WHY</span><strong>WADADA</strong><small>HEARTS AGENDA • APC • 2027</small></div></div></div></div></section>
 <section class="section convener-section" id="convener">
 <div class="convener-card">
 <div class="convener-copy reveal reveal-left">
@@ -102,7 +110,7 @@
 <span class="convener-badge">CONVENER</span>
 </div>
 </div></section>
-<section class="section gallery-section reveal reveal-up" id="gallery"><div class="section-head"><div><div class="section-kicker">07 / MOVEMENT MEDIA</div><h2>Stories from<br/><span>the movement.</span></h2></div><p class="section-description">Campaign photos, videos and moments from across Nasarawa State.</p></div><div class="public-gallery" id="publicGallery"><div class="gallery-loading">Loading movement media…</div></div></section>
+<section class="section gallery-section reveal reveal-up" id="gallery"><div class="section-head"><div><div class="section-kicker">06 / MOVEMENT MEDIA</div><h2>Stories from<br/><span>the movement.</span></h2></div><p class="section-description">Campaign photos, videos and moments from across Nasarawa State.</p></div><div class="public-gallery" id="publicGallery"><div class="gallery-loading">Loading movement media…</div></div></section>
 </main>
 <footer class="ww-footer">
 <div class="ww-footer-main">
