@@ -4,7 +4,7 @@ const dragLayer=document.getElementById("dragLayer"),resetPhoto=document.getElem
 const fitBtn=document.getElementById("fitBtn"),fullscreenBtn=document.getElementById("fullscreenBtn"),canvasWrap=document.getElementById("canvasWrap");
 const uploadZone=document.getElementById("uploadZone"),uploadError=document.getElementById("uploadError");
 const faceGuide=document.getElementById("faceGuide");
-const W=1200,H=1500; let supporterImg=new Image(), candidateImg=new Image(), apcImg=new Image(), genericAvatarImg=new Image(), officialImg=new Image();
+const W=1200; const TEMPLATE_H={flyer:1500,classic:880}; let H=TEMPLATE_H.flyer; let supporterImg=new Image(), candidateImg=new Image(), apcImg=new Image(), genericAvatarImg=new Image(), officialImg=new Image();
 let hasUploadedPhoto=false;
 let state={x:0,y:0,zoom:1.15,template:"flyer",drag:false,lastX:0,lastY:0};
 
@@ -36,11 +36,11 @@ genericAvatarImg.onload=()=>{ if(!hasUploadedPhoto){ supporterImg=genericAvatarI
 genericAvatarImg.src=asset("generic-avatar.png");
 supporterImg=genericAvatarImg;
 apcImg.onload=()=>render(); apcImg.src=asset("apc-flag.jpeg");
-// Official Senate portrait — used by the "Cover" template only. Kept as
-// a separate image from candidateImg (the flyer template's photo) so
-// redesigning this template can never affect the flyer, which stays
-// exactly as it was.
-officialImg.onload=()=>render(); officialImg.src=asset("wadada-senate-portrait.jpg");
+// Cover template's candidate photo, used only by the "Cover" template.
+// Kept as a separate image from candidateImg (the Flyer template's
+// photo) so redesigning this template can never affect the Flyer, which
+// stays exactly as it was.
+officialImg.onload=()=>render(); officialImg.src=asset("wadada-hero-bg.png");
 
 const MAX_PHOTO_BYTES=5*1024*1024;
 function showUploadError(message){
@@ -101,6 +101,13 @@ document.querySelectorAll(".template").forEach(b=>b.addEventListener("click",()=
   document.querySelectorAll(".template").forEach(x=>x.classList.remove("active"));
   b.classList.add("active");
   state.template=b.dataset.template;
+  // Resize the canvas's actual backing bitmap to match this template's
+  // own height *before* rendering into it — otherwise a shorter
+  // template would draw into the top of the previous, taller canvas
+  // and leave stale leftover pixels below it in the exported PNG.
+  H=TEMPLATE_H[state.template];
+  canvas.height=H;
+  canvasWrap.style.aspectRatio=`${W} / ${H}`;
   updateFaceGuide();
   render();
 }));
@@ -109,6 +116,7 @@ document.querySelectorAll(".template").forEach(b=>b.addEventListener("click",()=
 function fitSupporter(){state.x=0;state.y=0;state.zoom=1.15;zoomInput.value=state.zoom;render()}
 
 function render(ctx=mainCtx,template=state.template){
+  H=TEMPLATE_H[template];
   ctx.clearRect(0,0,W,H);
   if(template==="flyer"){
     drawFlyer(ctx);
@@ -176,124 +184,167 @@ function drawFlyerSupporter(ctx){
   if(!hasUploadedPhoto) drawAddPhotoHint(ctx,cx,cy,r);
 }
 function drawClassic(ctx){
-  // COVER TEMPLATE — a clean editorial portrait layout. The candidate
-  // portrait owns the right side, while the left side carries the
-  // campaign identity and the supporter photo. The composition is kept
-  // deliberately spacious so every element remains readable at full HD
-  // and at the smaller thumbnail size.
-  const split=700;
+  // COVER TEMPLATE — portrait on the left with the candidate's name
+  // directly beneath it, campaign identity and the supporter card on
+  // the right. Sized to its own content height (880, not the Flyer
+  // template's 1500) rather than padding out a taller canvas with
+  // decorative filler — see TEMPLATE_H below for how the canvas itself
+  // resizes per template.
+  const split=500;
   const leftW=split;
   const leftCx=leftW/2;
+  const rightW=W-split;
+  const footerY=H-70;
 
   // Base background.
   ctx.fillStyle=COLORS.deep;
   ctx.fillRect(0,0,W,H);
 
-  // Candidate portrait — right-side full bleed panel.
+  // Left panel — portrait with a radiating gold glow behind it.
+  const medallionCy=265;
   ctx.save();
   ctx.beginPath();
-  ctx.rect(split,0,W-split,H);
+  ctx.rect(0,0,leftW,H);
   ctx.clip();
-  drawCover(ctx,officialImg,split,0,W-split,H);
-  // Darken the lower portion so the footer transition feels intentional.
-  const portraitShade=ctx.createLinearGradient(0,H-420,0,H);
-  portraitShade.addColorStop(0,'rgba(2,47,24,0)');
-  portraitShade.addColorStop(1,'rgba(2,47,24,.88)');
-  ctx.fillStyle=portraitShade;
-  ctx.fillRect(split,H-420,W-split,420);
+  ctx.fillStyle='#064523';
+  ctx.fillRect(0,0,leftW,H);
+  [340,280,225].forEach((rad,i)=>{
+    ctx.strokeStyle=`rgba(245,197,66,${0.16-i*0.04})`;
+    ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(leftCx,medallionCy,rad,0,Math.PI*2);ctx.stroke();
+  });
+  const glow=ctx.createRadialGradient(leftCx,medallionCy,30,leftCx,medallionCy,380);
+  glow.addColorStop(0,'rgba(245,197,66,.14)');
+  glow.addColorStop(1,'rgba(245,197,66,0)');
+  ctx.fillStyle=glow;
+  ctx.fillRect(0,0,leftW,H);
+
+  // Framed portrait — close to the photo's own proportions so it fills
+  // naturally with minimal crop instead of forcing an unrelated shape.
+  const frameW=400,frameH=440,frameX=leftCx-frameW/2,frameY=medallionCy-frameH/2,frameR=24;
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.4)';
+  ctx.shadowBlur=36;
+  ctx.shadowOffsetY=18;
+  ctx.fillStyle='#053018';
+  roundRect(ctx,frameX,frameY,frameW,frameH,frameR);
+  ctx.fill();
+  ctx.restore();
+  ctx.save();
+  roundRect(ctx,frameX,frameY,frameW,frameH,frameR);
+  ctx.clip();
+  drawCoverCapped(ctx,officialImg,frameX,frameY,frameW,frameH,1.1);
+  // "I stand with" as a badge in the photo's own top-left corner —
+  // drawn inside this same clip so it respects the frame's rounded
+  // corner instead of a hard rectangle overlapping it. A dark pill
+  // behind the gold text keeps it legible regardless of what's behind
+  // it in the photo itself.
+  ctx.textAlign='left';
+  ctx.font='800 13px Arial';
+  const badgeLabel='I  STAND  WITH';
+  const badgeTextW=ctx.measureText(badgeLabel).width;
+  const badgePadX=16,badgePadY=10,badgeX=frameX+18,badgeY=frameY+18;
+  ctx.fillStyle='rgba(3,20,11,.62)';
+  roundRect(ctx,badgeX,badgeY,badgeTextW+badgePadX*2,badgePadY*2+15,999);
+  ctx.fill();
+  ctx.fillStyle=COLORS.gold;
+  ctx.fillText(badgeLabel,badgeX+badgePadX,badgeY+badgePadY+12);
+  ctx.restore();
+  ctx.strokeStyle='#fff';
+  ctx.lineWidth=6;
+  roundRect(ctx,frameX,frameY,frameW,frameH,frameR);
+  ctx.stroke();
+  ctx.strokeStyle=COLORS.gold;
+  ctx.lineWidth=3;
+  roundRect(ctx,frameX-8,frameY-8,frameW+16,frameH+16,frameR+8);
+  ctx.stroke();
+
+  // Name, then tagline, directly beneath the photo.
+  ctx.strokeStyle='rgba(245,197,66,.5)';
+  ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(leftCx-60,frameY+frameH+34);ctx.lineTo(leftCx+60,frameY+frameH+34);ctx.stroke();
+  ctx.textAlign='center';
+  ctx.fillStyle='#fff';
+  ctx.font='800 25px Manrope,Arial';
+  ctx.fillText('SEN. AHMED ALIYU WADADA',leftCx,frameY+frameH+74);
+  ctx.fillStyle=COLORS.gold;
+  ctx.font='800 17px Arial';
+  ctx.fillText('THE PEOPLE\u2019S CANDIDATE',leftCx,frameY+frameH+104);
+  ctx.fillStyle='rgba(255,255,255,.6)';
+  ctx.font='700 13px Arial';
+  ctx.fillText('NASARAWA STATE  \u2022  2027',leftCx,frameY+frameH+128);
+  ctx.textAlign='left';
   ctx.restore();
 
-  // Clean gold divider between editorial copy and portrait.
+  // Clean gold divider between portrait and editorial copy.
   ctx.fillStyle=COLORS.gold;
   ctx.fillRect(split-4,0,8,H);
 
-  // Subtle green panel texture/blocks on the left.
-  ctx.fillStyle='#064523';
-  ctx.fillRect(0,0,leftW,H);
-  ctx.fillStyle='rgba(245,197,66,.07)';
-  ctx.fillRect(0,0,leftW,18);
-  ctx.fillRect(0,H-18,leftW,18);
-
-  // APC badge.
-  const badgeSize=88,bx=54,by=52;
+  // APC badge — right panel.
+  const badgeSize=76,bx=split+54,by=45;
   ctx.fillStyle='#fff';
   roundRect(ctx,bx,by,badgeSize,badgeSize,12);
   ctx.fill();
-  if(apcImg.naturalWidth) ctx.drawImage(apcImg,bx+7,by+7,badgeSize-14,badgeSize-14);
+  if(apcImg.naturalWidth) ctx.drawImage(apcImg,bx+6,by+6,badgeSize-12,badgeSize-12);
 
   // Campaign identity.
+  const tx=split+54;
   ctx.textAlign='left';
   ctx.fillStyle=COLORS.gold;
-  ctx.font='800 22px Arial';
-  ctx.fillText('WHY WADADA',54,190);
+  ctx.font='800 19px Arial';
+  ctx.fillText('WHY WADADA',tx,155);
 
   ctx.fillStyle='#fff';
-  ctx.font='900 88px Manrope,Arial';
-  ctx.fillText('2027',54,282);
+  ctx.font='900 64px Manrope,Arial';
+  ctx.fillText('2027',tx,224);
 
   ctx.fillStyle='rgba(255,255,255,.28)';
-  ctx.fillRect(54,318,115,2);
+  ctx.fillRect(tx,250,100,2);
 
-  ctx.fillStyle='#fff';
-  ctx.font='800 26px Arial';
-  ctx.fillText('SEN. AHMED ALIYU',54,374);
-  ctx.fillStyle=COLORS.gold;
-  ctx.font='900 54px Manrope,Arial';
-  ctx.fillText('WADADA',54,438);
-
-  ctx.fillStyle='#fff';
-  ctx.font='800 22px Arial';
-  ctx.fillText('FOR GOVERNOR',54,482);
-  ctx.fillStyle='rgba(255,255,255,.82)';
-  ctx.font='700 16px Arial';
-  ctx.fillText('NASARAWA STATE  •  2027',54,510);
-
-  // Supporter section — clearly separated from the campaign identity.
+  // Supporter section — given the extra room freed up by dropping the
+  // "FOR GOVERNOR" line above, which just repeated what the big "2027"
+  // and the footer already establish.
+  const cardY=296,cardH=340;
   ctx.fillStyle='rgba(255,255,255,.12)';
-  roundRect(ctx,54,570,592,430,24);
+  roundRect(ctx,tx,cardY,rightW-108,cardH,22);
   ctx.fill();
 
-  ctx.fillStyle=COLORS.gold;
-  ctx.font='800 14px Arial';
-  ctx.fillText('I STAND WITH',82,616);
-
-  const cx=250,cy=790,r=138;
+  const cx=tx+166,cy=cardY+cardH/2,r=140;
   drawSupporter(ctx,cx,cy,r,0);
 
   ctx.textAlign='left';
   const supporterName=(nameInput.value.trim()||'YOUR NAME').toUpperCase();
   ctx.fillStyle='#fff';
-  ctx.font='800 29px Manrope,Arial';
-  ctx.fillText(supporterName,430,756);
+  ctx.font='800 28px Manrope,Arial';
+  ctx.fillText(supporterName,cx+r+40,cy-36);
   ctx.fillStyle=COLORS.gold;
   ctx.font='700 14px Arial';
-  ctx.fillText('PROUD SUPPORTER',430,786);
+  ctx.fillText('PROUD SUPPORTER',cx+r+40,cy-6);
   ctx.fillStyle='rgba(255,255,255,.7)';
   ctx.font='600 13px Arial';
-  ctx.fillText('WHY WADADA MOVEMENT',430,816);
+  ctx.fillText('WHY WADADA MOVEMENT',cx+r+40,cy+20);
 
-  // Short brand statement.
   ctx.fillStyle='#fff';
   ctx.font='800 18px Arial';
-  ctx.fillText('IN GOD WE TRUST',430,875);
+  ctx.fillText('IN GOD WE TRUST',cx+r+40,cy+70);
   ctx.fillStyle='rgba(255,255,255,.58)';
   ctx.font='600 12px Arial';
-  ctx.fillText('A better future for Nasarawa.',430,902);
+  ctx.fillText('A better future for Nasarawa.',cx+r+40,cy+94);
 
   // Footer across the whole poster.
   ctx.fillStyle='rgba(2,30,17,.9)';
-  ctx.fillRect(0,1410,W,90);
+  ctx.fillRect(0,footerY,W,70);
   ctx.strokeStyle=COLORS.gold;
   ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(0,1410);ctx.lineTo(W,1410);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(0,footerY);ctx.lineTo(W,footerY);ctx.stroke();
 
   ctx.fillStyle='#fff';
-  ctx.font='800 15px Arial';
+  ctx.font='800 14px Arial';
   ctx.textAlign='left';
-  ctx.fillText('SEN. AHMED ALIYU WADADA',54,1460);
+  ctx.fillText('SEN. AHMED ALIYU WADADA',54,footerY+42);
   ctx.textAlign='right';
   ctx.fillStyle=COLORS.gold;
-  ctx.fillText('NASARAWA STATE  •  2027',1146,1460);
+  ctx.fillText('NASARAWA STATE  \u2022  2027',W-54,footerY+42);
   ctx.textAlign='left';
 }
 function drawSupporter(ctx,cx=975,cy=1190,r=160,hintOffsetX=0){
@@ -331,6 +382,22 @@ function bottomLine(ctx,textColor="#fff",lineColor="rgba(255,255,255,.32)",xStar
 }
 function drawFrame(ctx){ctx.strokeStyle="rgba(255,255,255,.26)";ctx.lineWidth=2;ctx.strokeRect(39,39,W-78,H-78)}
 function drawCover(c,img,x,y,w,h){if(!img?.naturalWidth)return;const ratio=Math.max(w/img.width,h/img.height),nw=img.width*ratio,nh=img.height*ratio;c.drawImage(img,x+(w-nw)/2,y+(h-nh)/2,nw,nh)}
+// Same idea as drawCover, but caps the zoom instead of always filling the
+// box edge-to-edge. Needed for the Cover template's panel, which is very
+// tall and narrow (roughly 1:3) — a strict cover-fit on a photo that
+// isn't already shot in that same tall aspect crops away most of the
+// frame to fill it, which reads as "too zoomed in". Capping the scale at
+// (roughly) the contain ratio shows the whole photo instead, centered,
+// leaving the panel's own background color visible in any gap rather
+// than cropping — used only by the Cover template, not the Flyer one.
+function drawCoverCapped(c,img,x,y,w,h,maxZoomOverContain=1.15){
+  if(!img?.naturalWidth)return;
+  const coverRatio=Math.max(w/img.width,h/img.height);
+  const containRatio=Math.min(w/img.width,h/img.height);
+  const ratio=Math.min(coverRatio,containRatio*maxZoomOverContain);
+  const nw=img.width*ratio,nh=img.height*ratio;
+  c.drawImage(img,x+(w-nw)/2,y+(h-nh)/2,nw,nh);
+}
 function roundRect(c,x,y,w,h,r){c.beginPath();c.roundRect(x,y,w,h,r)}
 
 // Live thumbnail previews on the four template buttons — each is a small
@@ -354,24 +421,45 @@ function scheduleThumbnailRedraw(){
 function renderTemplateThumbnails(){
   Object.entries(templateThumbCanvases).forEach(([key,c])=>{
     const tctx=c.getContext("2d");
+    const targetH=TEMPLATE_H[key];
+    // Uniform scale, not c.width/W and c.height/H separately — those
+    // only match when a template's own aspect ratio equals the thumb
+    // button's fixed 4:5 box (true for the Flyer, no longer true for
+    // the Cover template's shorter canvas). A non-uniform scale would
+    // stretch that thumbnail's content vertically. Scaling uniformly
+    // and centering keeps every thumbnail an undistorted match for
+    // what that template actually exports, just letterboxed to fit the
+    // shared thumbnail size.
+    const scale=Math.min(c.width/W,c.height/targetH);
+    const offX=(c.width-W*scale)/2,offY=(c.height-targetH*scale)/2;
+    tctx.clearRect(0,0,c.width,c.height);
     tctx.save();
-    tctx.scale(c.width/W,c.height/H);
+    tctx.translate(offX,offY);
+    tctx.scale(scale,scale);
     render(tctx,key);
     tctx.restore();
   });
+  // render() sets the shared H for whichever template it just drew —
+  // after looping through every template's thumbnail, put it back to
+  // match the template actually active on the main canvas, or drag/zoom
+  // pointer math there would silently use the wrong template's height
+  // until the next click or render.
+  H=TEMPLATE_H[state.template];
 }
 
 // Face-guide overlay — a dashed circle over the live preview showing
 // exactly where the crop will land, matching the currently selected
 // template's circle position/size. Positioned with percentages of
 // .canvas-wrap's own box rather than fixed pixels, so it tracks the
-// canvas correctly at any screen size (canvas-wrap is kept at an exact
-// 4:5 ratio in CSS to match the 1200x1500 canvas, so percentages of one
-// map exactly onto percentages of the other).
+// canvas correctly at any screen size (canvas-wrap's aspect-ratio is
+// set in JS to match whatever the active template's own W:H is — see
+// the template click handler above — so percentages of one map exactly
+// onto percentages of the other for every template, not just the
+// Flyer's original 4:5).
 function updateFaceGuide(){
   if(!faceGuide) return;
   const isFlyer=state.template==="flyer";
-  const cx=isFlyer?955:250, cy=isFlyer?1000:790, r=isFlyer?135:138;
+  const cx=isFlyer?955:720, cy=isFlyer?1000:466, r=isFlyer?135:140;
   faceGuide.style.left=((cx-r)/W*100)+"%";
   faceGuide.style.top=((cy-r)/H*100)+"%";
   faceGuide.style.width=((r*2)/W*100)+"%";
