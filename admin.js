@@ -19,8 +19,7 @@ const FALLBACK_LGAS = [
 ];
 
 const $ = (id) => document.getElementById(id);
-let admin = null,
-  overview = null;
+let admin = null;
 
 function showDashboardError(message) {
   const el = $("dashboardError");
@@ -125,13 +124,27 @@ async function loadMe() {
     $("adminEmail").textContent = admin.email;
     $("roleBadge").textContent = roleLabel(admin.role);
     $("adminScope").textContent = scopeLabel(admin);
-    $("scopeBanner").textContent = `Viewing ${scopeLabel(admin)} • ${roleLabel(admin.role)}`;
     const superAdmin = admin.role === "super_admin";
     document.querySelectorAll(".super-only,.super-only-section").forEach((el) => {
       el.classList.toggle("hidden", !superAdmin);
     });
     if (!superAdmin && $("activity")) $("activity").classList.add("hidden");
-    loadOverview();
+    if (superAdmin) {
+      openSection("admins");
+    } else {
+      // LGA/Ward Coordinator roles currently have no section of their own
+      // — every remaining tab (Admin Management, Media & Gallery, Activity
+      // Log) is Super Admin-only, since they existed to manage supporter
+      // data that's since been removed. Show an explicit message instead
+      // of leaving a blank content area.
+      $("sectionTitle").textContent = "Command Centre";
+      const main = document.querySelector(".main");
+      const notice = document.createElement("div");
+      notice.className = "dashboard-error";
+      notice.textContent =
+        "Your role doesn't have access to any sections yet. Contact a Super Admin.";
+      main?.insertBefore(notice, main.querySelector(".section"));
+    }
   } catch (e) {
     console.error(e);
     showDashboardError("Couldn't load your admin profile: " + e.message);
@@ -160,7 +173,10 @@ $("loginForm").addEventListener("submit", async (e) => {
   }
 });
 $("logout").addEventListener("click", logout);
-$("refresh").addEventListener("click", () => loadOverview());
+$("refresh").addEventListener("click", () => {
+  const activeNav = document.querySelector(".nav[data-section].active");
+  if (activeNav) openSection(activeNav.dataset.section);
+});
 
 document
   .querySelectorAll(".nav[data-section], [data-go]")
@@ -180,99 +196,12 @@ function openSection(name) {
     .querySelectorAll(".nav[data-section]")
     .forEach((n) => n.classList.toggle("active", n.dataset.section === name));
   $("sectionTitle").textContent = {
-    overview: "Overview",
-    supporters: "Supporters",
-    lga: "LGA & Ward",
-    trends: "Growth Trends",
     activity: "Activity Log",
     admins: "Admin Management",
+    media: "Media & Gallery",
   }[name];
-  if (name === "trends") loadTrends(30);
   if (name === "activity") loadActivity();
 }
-
-function renderOverview() {
-  if (!overview) return;
-  $("total").textContent = fmt(overview.stats.total);
-  $("today").textContent = fmt(overview.stats.today);
-  $("week").textContent = fmt(overview.stats.last7Days);
-  $("lgaCount").textContent = fmt(overview.stats.lgasReached);
-  $("lastUpdated").textContent = `Updated ${time(new Date())}`;
-  const lga = overview.lgaStats || [],
-    max = Math.max(1, ...lga.map((x) => x.count));
-  $("lgaBars").innerHTML =
-    lga
-      .slice(0, 8)
-      .map(
-        (x) =>
-          `<div class="bar-row"><span>${esc(x.lga)}</span><div class="bar-track"><i class="bar-fill" style="width:${(x.count / max) * 100}%"></i></div><strong class="bar-value">${fmt(x.count)}</strong></div>`,
-      )
-      .join("") || `<p class="muted">No registrations yet.</p>`;
-  $("recent").innerHTML =
-    (overview.recent || [])
-      .map(
-        (x) =>
-          `<div class="recent-row"><div><strong>${esc(x.name)}</strong><span>${esc(x.lga)}${x.ward ? " • " + esc(x.ward) : ""}</span></div><time>${date(x.createdAt)}</time></div>`,
-      )
-      .join("") || `<p class="muted">No registrations yet.</p>`;
-  const total = (overview.recent || []).length;
-  $("trendTotal").textContent = `${fmt(overview.stats.last7Days)} / 7 days`;
-}
-async function loadOverview() {
-  try {
-    overview = await api("/api/admin/overview");
-    showDashboardError(null);
-    renderOverview();
-    loadTrends(30);
-  } catch (e) {
-    console.error(e);
-    showDashboardError("Couldn't load overview data: " + e.message);
-  }
-}
-
-function renderTrend(data, targetId) {
-  const el = $(targetId);
-  if (!el) return;
-  const max = Math.max(1, ...data.map((x) => x.count));
-  el.innerHTML = data
-    .map(
-      (x) =>
-        `<div class="trend-bar" style="height:${Math.max(2, (x.count / max) * 100)}%"><span>${x.date}: ${fmt(x.count)}</span></div>`,
-    )
-    .join("");
-  const labels = document.createElement("div");
-  labels.className = "trend-labels";
-  labels.innerHTML = `<span>${data[0]?.date || ""}</span><span>${data[Math.floor(data.length / 2)]?.date || ""}</span><span>${data[data.length - 1]?.date || ""}</span>`;
-  el.after(labels);
-}
-async function loadTrends(days = 30) {
-  try {
-    const d = await api(`/api/admin/trends?days=${days}`);
-    document.querySelectorAll(".trend-labels").forEach((x) => x.remove());
-    const sum = d.data.reduce((a, x) => a + x.count, 0);
-    $("trendSum").textContent = fmt(sum);
-    if ($("trendTitle")) $("trendTitle").textContent = `Last ${days} days`;
-    if ($("trendTotal")) $("trendTotal").textContent = `${fmt(sum)} registrations`;
-    renderTrend(d.data, "trendChart");
-    if (!$("trends").classList.contains("hidden")) renderTrend(d.data, "trendChartBig");
-  } catch (e) {
-    console.error(e);
-    showDashboardError("Couldn't load growth trends: " + e.message);
-  }
-}
-document.querySelectorAll(".range").forEach((btn) =>
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".range").forEach((x) => x.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".trend-labels").forEach((x) => x.remove());
-    loadTrends(Number(btn.dataset.days));
-  }),
-);
-
-// The "supporters" tab (search/filter/table/pagination/CSV export) and
-// the "lga" tab (LGA & Ward leaderboard) are now standalone React
-// islands — see src/supporters/ and src/lga-ward/. They fetch their own
-// data and manage their own state; nothing here needs to drive them.
 
 async function loadActivity() {
   if (admin?.role !== "super_admin") return;
@@ -529,11 +458,6 @@ openSection = function (name) {
    ADMIN ACCOUNT CONTROLS + PERMISSION MATRIX
    ============================================================ */
 const permissionLabels = {
-  view_dashboard: "View dashboard",
-  view_supporters: "View supporter register",
-  export_supporters: "Export supporter data",
-  view_lga_analytics: "View LGA analytics",
-  view_ward_analytics: "View Ward analytics",
   view_activity: "View audit activity",
   create_admin: "Create administrators",
   edit_admin: "Edit administrators",
@@ -861,34 +785,8 @@ $("mediaLibrary")?.addEventListener("click", async (e) => {
   }
 });
 
-(async function loadIntelligence() {
-  // These two calls were previously missing the "/api/admin" prefix that
-  // routes/admin.js actually mounts under, so they 404'd silently (caught
-  // below and just logged as a warning) — the intelligence panel and
-  // notifications banner never had real data. Fixed to the real paths.
+(async function loadNotifications() {
   try {
-    const d = await api("/api/admin/dashboard-intelligence");
-    const x = d.data || {};
-    document.getElementById("growthPercent") &&
-      (document.getElementById("growthPercent").textContent =
-        (x.growthPercent >= 0 ? "+" : "") + x.growthPercent + "%");
-    document.getElementById("last30Days") &&
-      (document.getElementById("last30Days").textContent = Number(
-        x.last30Days || 0,
-      ).toLocaleString());
-    const l = x.topLga?.[0],
-      w = x.topWard?.[0];
-    if (l) {
-      document.getElementById("topLgaName").textContent = l._id || "—";
-      document.getElementById("topLgaCount").textContent =
-        Number(l.count || 0).toLocaleString() + " supporters";
-    }
-    if (w) {
-      document.getElementById("topWardName").textContent =
-        (w._id?.lga || "") + " · " + (w._id?.ward || "");
-      document.getElementById("topWardCount").textContent =
-        Number(w.count || 0).toLocaleString() + " supporters";
-    }
     const n = await api("/api/admin/notifications");
     const el = document.getElementById("adminNotifications");
     if (el)
@@ -896,6 +794,6 @@ $("mediaLibrary")?.addEventListener("click", async (e) => {
         ? "Latest alert: " + n.data[0].title + " — " + n.data[0].message
         : "No new campaign alerts.";
   } catch (e) {
-    console.warn("Intelligence unavailable", e);
+    console.warn("Notifications unavailable", e);
   }
 })();

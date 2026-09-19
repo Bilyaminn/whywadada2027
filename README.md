@@ -1,6 +1,6 @@
 # WHY WADADA — HEARTS Agenda 2027
 
-Frontend in plain HTML/CSS/JavaScript, built and served with [Vite](https://vite.dev).
+Frontend in plain HTML/CSS/JavaScript, built and served with [Vite](https://vite.dev). No frontend framework — every page is a real static file.
 
 ## Run
 
@@ -22,68 +22,55 @@ VITE_API_BASE=http://localhost:5000
 backend URL there before building for deployment. If frontend and backend
 are served from the same origin, set `VITE_API_BASE=` (empty).
 
-There is no more `config.js` to remember to edit — the API base URL is
-baked into the build from these `.env` files via `import.meta.env?.VITE_API_BASE`.
+The API base URL is baked into the build from these `.env` files via
+`import.meta.env?.VITE_API_BASE`. On `localhost`/`127.0.0.1` with no
+`VITE_API_BASE` set, `script.js`, `admin.js`, and `admin-login.js` all fall
+back to `http://localhost:5000` so local dev works without a `.env` file.
 
-## New in this version
+## Pages
 
-### 1. Supporter counter
-The homepage has a live-looking supporter counter UI, but it intentionally does **not invent a number**. It requests:
-
-`GET /api/supporters`
-
-Expected response:
-
-```json
-{"count": 12345}
-```
-
-When the endpoint is connected, the number animates into view and the status changes to "Live registration data".
-
-### 2. LGA directory
-All 13 Nasarawa State LGAs are included with search/filter functionality:
-Akwanga, Awe, Doma, Karu, Keana, Keffi, Kokona, Lafia, Nasarawa, Nasarawa Eggon, Obi, Toto and Wamba.
-
-The cards are ready for adding verified coordinator contacts, event information, registration totals or links to LGA pages.
-
-### 3. Advanced poster generator
-`generate.html` now has:
-- supporter photo upload
-- live canvas preview
-- drag-to-position supporter photo
-- zoom slider
-- mouse-wheel zoom
-- touch/pointer dragging
-- reset/fit control
-- two poster templates (Flyer, Cover)
-- supporter name
-- APC / 2027 treatment
-- HEARTS Agenda branding
-- candidate image
-- HD PNG export
-- fullscreen preview
-- mobile-responsive UI
-
-The supplied Wadada image is used as both the candidate visual and the favicon.
-
-## Run
-`npm run dev` (see the top of this README) or `npm run build && npm run preview` for a production check.
-
-## Production note
-Before launch, replace placeholder HEARTS Agenda descriptions with officially approved wording and connect `/api/supporters` to the real registration database.
-
-## Supporter backend
-The `backend/` directory contains the Express + MongoDB API for live supporter registration and the homepage counter. See `backend/README.md` for setup.
+- **`index.html`** — public campaign site: hero, About, the HEARTS Agenda
+  (2027–2031), a poster CTA, the convener section, and a public "Movement
+  Media" gallery fed by `GET /api/media`. There is no public supporter
+  registration form or live supporter count — the site is poster-first.
+- **`generate.html`** — the poster generator. Upload a photo, drag/zoom to
+  position it, add your name, pick a template (Flyer or Cover — see
+  `generator.js`), and export a HD PNG. Entirely client-side; doesn't touch
+  the backend at all.
+- **`admin.html`** / **`admin-login.html`** — the campaign command centre.
+  See "Admin dashboard" below.
 
 ## Admin dashboard
-Open `admin.html` to access the protected campaign command centre. Configure `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, and `JWT_SECRET` in `backend/.env` first — see `ADMIN_SETUP.md` for generating the password hash.
 
+Open `admin.html`. Configure `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, and
+`JWT_SECRET` in `backend/.env` first — see `ADMIN_SETUP.md` for generating
+the password hash.
 
-## Campaign command centre v2
-The admin dashboard now includes role-based access (Super Admin, LGA Coordinator, Ward Coordinator), server-side data scoping, ward analytics, LGA leaderboards, 30/60/90-day registration trends, CSV exports, and a Super Admin activity log.
+Three sections, all Super Admin-only:
+- **Admin Management** — create/edit/disable coordinator accounts, reset
+  passwords, and the role/permission matrix.
+- **Media & Gallery** — upload and manage the photos/videos shown in the
+  public site's Movement Media gallery.
+- **Activity Log** — audit trail of admin actions.
 
-## React islands
-`admin.html`'s Supporters tab and LGA & Ward tab are each standalone React components rather than hand-rolled DOM manipulation — see `src/supporters/README.md` and `src/lga-ward/README.md`. Run both islands' integration tests with `npm run test:react` (or individually via `npm run test:supporters` / `npm run test:lga-ward`).
+**Known gap:** LGA Coordinator and Ward Coordinator roles exist (used to
+assign an admin's territory) but currently have no section of their own —
+they were built around supporter registration data, which has been
+removed. See `backend/README.md`'s "Admin roles" section for detail. A
+logged-in coordinator sees an explicit "no access yet" message rather than
+a blank screen.
 
-## HEARTS Agenda content integration
-The public site now incorporates the supplied Wadada HEARTS Agenda (2027–2031), including the six HEARTS pillars and their stated goals/key activities, cross-cutting enablers, delivery/accountability framework, biography, professional background and selected honours. The wording is based on the supplied campaign document rather than invented placeholder policy copy.
+## Backend
+
+`backend/` is the Express + MongoDB API — admin auth, campaign content,
+media gallery, and the `/api/lgas` / `/api/wards` config endpoints (used
+for coordinator territory assignment, not supporter data). See
+`backend/README.md`.
+
+## HEARTS Agenda content
+
+The public site's HEARTS Agenda section (2027–2031), including the six
+HEARTS pillars and their stated goals/key activities, cross-cutting
+enablers, delivery/accountability framework, biography, professional
+background and selected honours, is based on the supplied campaign
+document rather than invented placeholder policy copy.

@@ -1,13 +1,9 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
 import { resolve } from "node:path";
 
-// Multi-page build: mostly plain HTML/CSS/JS, with one React island
-// (src/supporters/) mounted into admin.html's Supporters tab — see that
-// folder's README for why just that one page. The React plugin only
-// affects files under src/; every other page is untouched by it.
+// Multi-page build: plain HTML/CSS/JS, no framework — every page is a
+// real static file, listed here so Vite's build includes all four.
 export default defineConfig({
-  plugins: [react()],
   build: {
     rollupOptions: {
       input: {

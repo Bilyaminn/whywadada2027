@@ -13,7 +13,7 @@
       <div class="brand"><img src="assets/wadada-icon.png" alt=""><span>WHY WADADA</span></div>
       <div class="eyebrow">CAMPAIGN COMMAND CENTRE</div>
       <h1>Lead with<br><span>HEARTS.</span></h1>
-      <p>Secure campaign intelligence for supporter growth across Nasarawa State.</p>
+      <p>Secure access for campaign administrators across Nasarawa State.</p>
       <form id="loginForm">
         <label>Email<input id="email" type="email" required autocomplete="username" placeholder="Admin email"></label>
         <label>Password<input id="password" type="password" required autocomplete="current-password" placeholder="Password"></label>
@@ -32,13 +32,9 @@
         <span id="adminScope">All Nasarawa</span>
       </div>
       <div class="side-label">COMMAND CENTRE</div>
-      <button class="nav active" data-section="overview"><b>01</b> Overview</button>
-      <button class="nav" data-section="supporters"><b>02</b> Supporters</button>
-      <button class="nav" data-section="lga"><b>03</b> LGA & Ward</button>
-      <button class="nav" data-section="trends"><b>04</b> Growth Trends</button>
-      <button class="nav super-only" data-section="activity"><b>05</b> Activity Log</button>
-      <button class="nav super-only" data-section="admins"><b>06</b> Admin Management</button>
-      <button class="nav super-only" data-section="media"><b>07</b> Media & Gallery</button>
+      <button class="nav active super-only" data-section="admins"><b>01</b> Admin Management</button>
+      <button class="nav super-only" data-section="media"><b>02</b> Media & Gallery</button>
+      <button class="nav super-only" data-section="activity"><b>03</b> Activity Log</button>
       <a class="nav link" href="index.html"><b>↗</b> Public Website</a>
       <div class="sidebar-bottom">
         <div class="hearts">H E A R T S <small>HUMAN • ECONOMIC • ACCOUNTABLE • RESPONSIVE • TRANSPARENT • SECURITY</small></div>
@@ -51,52 +47,10 @@
       <header class="topbar">
         <div>
           <div class="eyebrow">NASARAWA STATE • 2027</div>
-          <h2 id="sectionTitle">Overview</h2>
+          <h2 id="sectionTitle">Admin Management</h2>
         </div>
         <div class="top-actions"><span id="lastUpdated">—</span><button id="refresh">↻ Refresh</button></div>
       </header>
-
-      <section id="overview" class="section">
-        <div class="scope-banner" id="scopeBanner">Live campaign intelligence</div>
-        <div class="metrics">
-          <article class="metric"><span>TOTAL SUPPORTERS</span><strong id="total">—</strong><small>Registered in your scope</small></article>
-          <article class="metric"><span>TODAY</span><strong id="today">—</strong><small>Since midnight</small></article>
-          <article class="metric"><span>LAST 7 DAYS</span><strong id="week">—</strong><small>New registrations</small></article>
-          <article class="metric accent"><span>REACH</span><strong id="lgaCount">—</strong><small>LGAs with registrations</small></article>
-        </div>
-
-        <div class="grid-two">
-          <article class="panel">
-            <div class="panel-head"><div><span class="eyebrow">GEOGRAPHY</span><h3>LGA leaderboard</h3></div><button class="ghost" data-go="lga">View all</button></div>
-            <div id="lgaBars" class="bars"></div>
-          </article>
-          <article class="panel">
-            <div class="panel-head"><div><span class="eyebrow">LATEST</span><h3>Recent supporters</h3></div><button class="ghost" data-go="supporters">View all</button></div>
-            <div id="recent" class="recent"></div>
-          </article>
-        </div>
-
-        <div class="panel trend-panel">
-          <div class="panel-head"><div><span class="eyebrow">MOMENTUM</span><h3>30-day registration trend</h3></div><span class="trend-total" id="trendTotal">—</span></div>
-          <div id="trendChart" class="trend-chart"></div>
-        </div>
-      </section>
-
-      <section id="supporters" class="section hidden">
-        <div class="section-intro"><div><span class="eyebrow">SUPPORTER REGISTER</span><h3>People behind the movement</h3></div><p>Search and review registrations available within your role's permitted scope.</p></div>
-        <div id="supportersRoot"></div>
-      </section>
-
-      <section id="lga" class="section hidden">
-        <div class="section-intro"><div><span class="eyebrow">FIELD INTELLIGENCE</span><h3>LGA & Ward leaderboard</h3></div><p>See where supporter registrations are concentrating and identify strong local structures.</p></div>
-        <div id="lgaWardRoot"></div>
-      </section>
-
-      <section id="trends" class="section hidden">
-        <div class="section-intro"><div><span class="eyebrow">GROWTH INTELLIGENCE</span><h3>Registration momentum</h3></div><p>Track daily supporter growth and compare the movement's current pace.</p></div>
-        <div class="range-tabs"><button class="range active" data-days="30">30 days</button><button class="range" data-days="60">60 days</button><button class="range" data-days="90">90 days</button></div>
-        <article class="panel trend-panel big"><div class="panel-head"><div><span class="eyebrow">DAILY REGISTRATIONS</span><h3 id="trendTitle">Last 30 days</h3></div><strong id="trendSum">—</strong></div><div id="trendChartBig" class="trend-chart big-chart"></div></article>
-      </section>
 
       <section id="admins" class="section hidden super-only-section">
   <div class="admin-command-head">
@@ -138,7 +92,7 @@
       <button class="admin-modal-close" type="button" data-close-admin-modal aria-label="Close">×</button>
       <div class="modal-kicker"><span class="modal-shield">✓</span><span>SECURE ACCESS</span></div>
       <h3 id="createAdminTitle">Create administrator</h3>
-      <p class="modal-copy">Create a scoped account. Coordinators will only see supporter data within the LGA or Ward you assign.</p>
+      <p class="modal-copy">Create an LGA or Ward Coordinator account, scoped to the geography you assign.</p>
       <form id="createAdminForm" class="admin-form">
         <div class="admin-field full"><label for="newAdminEmail">Email address</label><input id="newAdminEmail" type="email" required autocomplete="off" placeholder="coordinator@example.com"></div>
         <div class="admin-field"><label for="newAdminPassword">Temporary password</label><input id="newAdminPassword" type="password" required minlength="8" autocomplete="new-password" placeholder="Minimum 8 characters"><small>They can change this after signing in.</small></div>
@@ -220,11 +174,9 @@
         <div class="section-intro"><div><span class="eyebrow">AUDIT TRAIL</span><h3>Admin activity</h3></div><p>Super Admin only. Review administrative access and data exports.</p></div>
         <article class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Time</th><th>Action</th><th>Admin</th><th>Role</th><th>Scope</th></tr></thead><tbody id="activityRows"></tbody></table></div></article>
       </section>
-    <section class="section" id="intelligencePanel"><div class="section-intro"><div><span class="eyebrow">CAMPAIGN INTELLIGENCE</span><h3>What needs attention</h3></div><p>Recent growth, strongest LGAs and fastest-moving wards.</p></div><div class="intelligence-grid"><div class="intel-card"><span>30-DAY GROWTH</span><strong id="growthPercent">—</strong><small>vs previous 30 days</small></div><div class="intel-card"><span>LAST 30 DAYS</span><strong id="last30Days">—</strong><small>new registrations</small></div><div class="intel-card"><span>TOP LGA</span><strong id="topLgaName">—</strong><small id="topLgaCount">— supporters</small></div><div class="intel-card"><span>TOP WARD</span><strong id="topWardName">—</strong><small id="topWardCount">— supporters</small></div></div><div class="notification-strip" id="adminNotifications">Loading campaign alerts…</div></section>
+    <section class="section" id="intelligencePanel"><div class="section-intro"><div><span class="eyebrow">CAMPAIGN ALERTS</span><h3>What needs attention</h3></div><p>Announcements posted for administrators.</p></div><div class="notification-strip" id="adminNotifications">Loading campaign alerts…</div></section>
 </main>
   </div>
   <script type="module" src="admin.js"></script>
-  <script type="module" src="/src/supporters/main.jsx"></script>
-  <script type="module" src="/src/lga-ward/main.jsx"></script>
 </body>
 </html>
