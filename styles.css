@@ -1478,7 +1478,7 @@ blockquote span {
 }
 
 /* =========================================================
-   WHY WADADA — PREMIUM FOOTER
+   WADADA PROJECT — PREMIUM FOOTER
    ========================================================= */
 .ww-footer {
   margin-top: 80px;
@@ -1872,7 +1872,7 @@ a {
   transform: translateY(-3px);
 }
 
-/* Simple WHY WADADA footer identity — no photo/icon clutter. */
+/* Simple WADADA PROJECT footer identity — no photo/icon clutter. */
 .ww-footer-brand-simple {
   align-self: start;
   padding: 4px 0;
@@ -2052,7 +2052,7 @@ a {
 }
 
 /* =========================================================
-   OFFICIAL WHY WADADA LOGO — site-wide identity
+   OFFICIAL WADADA PROJECT LOGO — site-wide identity
    ========================================================= */
 .ww-footer-logo {
   width: 92px;
@@ -2916,4 +2916,19 @@ main#top > .gallery-section { position: relative; z-index: 2; }
   body.menu-open{overflow:hidden!important;}
 }@media(max-width:1100px){}
 @media(max-width:650px){  .lga-v2 .lga-grid-v2{grid-template-columns:repeat(2,minmax(0,1fr))!important;overflow:visible!important;}
+}
+
+/* Brand hierarchy: WADADA is always the prominent word, PROJECT sits smaller beside/below it. */
+.hero h1 .hero-project {
+  display: block;
+  font-size: 0.42em;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-top: 0.06em;
+}
+.poster-copy h2 .poster-project {
+  font-size: 0.45em;
+  letter-spacing: 0.02em;
+  font-weight: 800;
+  vertical-align: baseline;
 }

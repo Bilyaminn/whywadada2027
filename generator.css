@@ -52,7 +52,7 @@ body{margin:0;font-family:"DM Sans",sans-serif;background:var(--cream);color:var
 @media(max-width:520px){.generator-header{padding:0 16px}.header-title{display:none}.controls{padding:20px 14px}.controls-card{padding:24px 18px}.preview-area{padding:20px 10px}.canvas-wrap{max-width:96vw;max-height:72vh}.preview-toolbar{padding:0 4px}}
 
 
-/* Official WHY WADADA identity in the poster studio header */
+/* Official WADADA PROJECT identity in the poster studio header */
 .generator-brand{display:flex;align-items:center;gap:12px;min-width:0}
 .generator-brand img{width:44px;height:44px;object-fit:cover;border-radius:12px;background:#fff;box-shadow:0 5px 16px rgba(0,0,0,.14)}
 @media(max-width:700px){.generator-brand img{width:38px;height:38px}.generator-brand .header-title{font-size:10px}}

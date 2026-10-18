@@ -1,4 +1,4 @@
-# WHY WADADA — HEARTS Agenda 2027
+# WADADA PROJECT — HEARTS Agenda 2027
 
 Frontend in plain HTML/CSS/JavaScript, built and served with [Vite](https://vite.dev). No frontend framework — every page is a real static file.
 

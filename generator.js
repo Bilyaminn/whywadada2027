@@ -149,7 +149,7 @@ function drawFlyer(ctx){
   const bcx=74,bcy=70,br=20;
   ctx.beginPath();ctx.arc(bcx,bcy,br,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
   ctx.save();ctx.fillStyle=COLORS.flyerDark;ctx.font="900 20px Manrope,Arial";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("W",bcx,bcy+1);ctx.restore();
-  ctx.fillStyle="#fff";ctx.font="800 16px Manrope,Arial";ctx.fillText("WHY WADADA?",bcx+br+10,bcy-4);
+  ctx.fillStyle="#fff";ctx.font="800 16px Manrope,Arial";ctx.fillText("WADADA PROJECT?",bcx+br+10,bcy-4);
   ctx.fillStyle=COLORS.flyerGold;ctx.font="600 11px Arial";ctx.fillText("In God We Trust",bcx+br+10,bcy+12);
 
   // APC badge, top-right
@@ -292,7 +292,7 @@ function drawClassic(ctx){
   ctx.textAlign='left';
   ctx.fillStyle=COLORS.gold;
   ctx.font='800 19px Arial';
-  ctx.fillText('WHY WADADA',tx,155);
+  ctx.fillText('WADADA PROJECT',tx,155);
 
   ctx.fillStyle='#fff';
   ctx.font='900 64px Manrope,Arial';
@@ -322,7 +322,7 @@ function drawClassic(ctx){
   ctx.fillText('PROUD SUPPORTER',cx+r+40,cy-6);
   ctx.fillStyle='rgba(255,255,255,.7)';
   ctx.font='600 13px Arial';
-  ctx.fillText('WHY WADADA MOVEMENT',cx+r+40,cy+20);
+  ctx.fillText('WADADA PROJECT MOVEMENT',cx+r+40,cy+20);
 
   ctx.fillStyle='#fff';
   ctx.font='800 18px Arial';
@@ -476,4 +476,4 @@ dragLayer.addEventListener("wheel",e=>{e.preventDefault();state.zoom=Math.min(2.
 dragLayer.addEventListener("dblclick",fitSupporter);
 
 fullscreenBtn.addEventListener("click",()=>{canvasWrap.parentElement.classList.toggle("fullscreen")});
-downloadBtn.addEventListener("click",()=>{render();const a=document.createElement("a");a.download="why-wadada-poster-hd.png";a.href=canvas.toDataURL("image/png");a.click()});
+downloadBtn.addEventListener("click",()=>{render();const a=document.createElement("a");a.download="wadada-project-poster-hd.png";a.href=canvas.toDataURL("image/png");a.click()});
